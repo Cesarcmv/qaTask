@@ -1,5 +1,14 @@
 const env = require('node-env-file');
+var PrettyReporter = require('protractor-pretty-html-reporter').Reporter;
+var path = require('path');
+
 env('.env');
+
+var prettyReporter = new PrettyReporter({
+    // required, there is no default
+    path: path.join(__dirname, 'results'),
+    screenshotOnPassed: true
+});
 
 exports.config = {
     seleniumAddress: 'http://localhost:4444/wd/hub',
@@ -32,6 +41,7 @@ exports.config = {
     },
 
     onPrepare: function () {
+        jasmine.getEnv().addReporter(prettyReporter);
         browser.ignoreSynchronization = true
         setTimeout(function () {
             browser.driver.executeScript(function () {
@@ -43,5 +53,12 @@ exports.config = {
                 browser.driver.manage().window().setSize(result.width, result.height)
             })
         })
+    },
+
+    /* if using isSharded option see below */
+    beforeLaunch() {
+        prettyReporter.startReporter();
     }
+
+
 }
