@@ -2,6 +2,7 @@ const env = require('node-env-file');
 var PrettyReporter = require('protractor-pretty-html-reporter').Reporter;
 var path = require('path');
 
+
 env('.env');
 
 var prettyReporter = new PrettyReporter({
